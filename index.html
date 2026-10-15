@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0d0f14">
+<title>КлипМастер</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="splash" class="splash"><img src="icon.svg" alt=""><h1>КлипМастер</h1><p>видеоредактор</p></div>
+
+<main id="app" hidden>
+  <header class="topbar">
+    <div class="brand"><img src="icon.svg" alt=""><span>КлипМастер</span></div>
+    <div class="top-actions">
+      <button id="newBtn" class="chip" title="Новый проект">Новый</button>
+      <button id="formatBtn" class="chip" title="Формат кадра">16:9</button>
+      <button id="exportBtn" class="cta" disabled>Экспорт</button>
+    </div>
+  </header>
+
+  <section class="stage">
+    <div id="emptyStage" class="empty-stage">
+      <div class="empty-icon">
+        <svg viewBox="0 0 48 48" width="56" height="56"><rect x="6" y="10" width="36" height="28" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M21 18l10 6-10 6z" fill="currentColor"/></svg>
+      </div>
+      <h2>Новый проект</h2>
+      <p>Добавьте одно или несколько видео — обрежьте, расставьте по порядку и сохраните в MP4 720p.</p>
+      <button id="importBig" class="cta big">＋ Добавить видео</button>
+    </div>
+    <div id="player" class="player" hidden>
+      <div id="frame" class="frame">
+        <video id="preview" playsinline preload="metadata"></video>
+        <div id="textPreview" class="text-preview" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="transport" class="transport" hidden>
+    <button id="playBtn" class="icon-btn" aria-label="Воспроизвести">
+      <svg id="playIco" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg>
+    </button>
+    <span id="timeLabel" class="time">0:00 / 0:00</span>
+    <span class="spacer"></span>
+    <span id="totalLabel" class="time dim">Итого 0:00</span>
+  </section>
+
+  <section class="timeline-wrap">
+    <div class="timeline-head">
+      <span>Таймлайн</span>
+      <span id="clipCount" class="dim">0 клипов</span>
+    </div>
+    <div class="timeline" id="timeline">
+      <div id="clips" class="clips"></div>
+      <button id="importSmall" class="add-tile" aria-label="Добавить видео">＋</button>
+    </div>
+    <div class="tracks">
+      <div id="musicTrack" class="track music" hidden>♪ <span id="musicName"></span></div>
+      <div id="textTrack" class="track text" hidden>Т <span id="textName"></span></div>
+    </div>
+  </section>
+
+  <!-- Панели инструментов -->
+  <section id="panel" class="panel" hidden>
+    <div id="panel-trim" class="pane" hidden>
+      <div class="pane-title">Обрезка клипа <span id="trimInfo" class="dim"></span></div>
+      <label class="slider-row"><span>Начало</span><input id="trimStart" type="range" min="0" max="1000" step="1"><b id="trimStartLbl">0:00.0</b></label>
+      <label class="slider-row"><span>Конец</span><input id="trimEnd" type="range" min="0" max="1000" step="1"><b id="trimEndLbl">0:00.0</b></label>
+      <div class="sub">Скорость</div>
+      <div class="seg" id="speedSeg"><button data-s="0.25">0.25×</button><button data-s="0.5">0.5×</button><button data-s="1" class="on">1×</button><button data-s="1.5">1.5×</button><button data-s="2">2×</button><button data-s="3">3×</button></div>
+      <div class="row-btns">
+        <button id="moveLeft" class="ghost">← Раньше</button>
+        <button id="moveRight" class="ghost">Позже →</button>
+        <button id="dupBtn" class="ghost">Дублировать</button>
+        <button id="splitBtn" class="ghost">Разрезать</button>
+        <button id="deleteClip" class="ghost danger">Удалить</button>
+      </div>
+    </div>
+    <div id="panel-filter" class="pane" hidden>
+      <div class="pane-title">Фильтр клипа <span id="filterInfo" class="dim"></span></div>
+      <div class="presets" id="filters"></div>
+      <div class="row-btns"><button id="filterAll" class="ghost">Применить ко всем клипам</button></div>
+    </div>
+    <div id="panel-trans" class="pane" hidden>
+      <div class="pane-title">Переход <span id="transInfo" class="dim"></span></div>
+      <div class="presets" id="transitions"></div>
+      <div class="row-btns"><button id="transAll" class="ghost">Применить ко всем стыкам</button></div>
+      <p class="hint">Длительность ≈0,8 с. «Наплыв» и «Шторка» накладывают клипы друг на друга (общая длина уменьшается). Переходы видны в готовом файле, в превью не проигрываются.</p>
+    </div>
+    <div id="panel-music" class="pane" hidden>
+      <div class="pane-title">Музыка</div>
+      <div class="row-btns">
+        <button id="pickMusic" class="ghost">Выбрать трек</button>
+        <button id="removeMusic" class="ghost danger" hidden>Убрать</button>
+      </div>
+      <label class="slider-row"><span>Музыка</span><input id="musicVol" type="range" min="0" max="150" value="80"><b id="musicVolLbl">80%</b></label>
+      <label class="slider-row"><span>Оригинал</span><input id="origVol" type="range" min="0" max="150" value="100"><b id="origVolLbl">100%</b></label>
+      <label class="slider-row"><span>Старт трека</span><input id="musicStart" type="range" min="0" max="0" value="0"><b id="musicStartLbl">0:00</b></label>
+      <label class="check"><input id="muteOriginal" type="checkbox"> Отключить звук исходных клипов</label>
+      <p class="hint">Трек звучит на всём видео и повторяется, если короче. «Старт трека» — с какого места начать музыку.</p>
+    </div>
+    <div id="panel-text" class="pane" hidden>
+      <div class="pane-title">Текст поверх видео</div>
+      <input id="textInput" class="text-input" maxlength="80" placeholder="Например: Лето 2026">
+      <div class="seg" id="textPos">
+        <button data-pos="top">Сверху</button><button data-pos="center">По центру</button><button data-pos="bottom" class="on">Снизу</button>
+      </div>
+      <div class="sub">Размер</div>
+      <div class="seg" id="textSizeSeg"><button data-v="36">S</button><button data-v="56" class="on">M</button><button data-v="80">L</button><button data-v="110">XL</button></div>
+      <div class="sub">Стиль</div>
+      <div class="seg" id="textStyleSeg"><button data-v="box" class="on">Плашка</button><button data-v="plain">Жирный</button><button data-v="light">Тонкий</button><button data-v="pill">Акцент</button></div>
+      <div class="sub">Цвет</div>
+      <div class="colors" id="textColors"></div>
+      <p class="hint">Текст впекается в кадр на всём видео при экспорте.</p>
+    </div>
+  </section>
+
+  <nav class="toolbar">
+    <button data-tool="trim" disabled><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.1 15.9M14.5 14.5L20 20M8.1 8.1L12 12"/></svg><span>Обрезка</span></button>
+    <button data-tool="filter" disabled><svg viewBox="0 0 24 24"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/></svg><span>Фильтры</span></button>
+    <button data-tool="music" disabled><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>Музыка</span></button>
+    <button data-tool="text" disabled><svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg><span>Текст</span></button>
+    <button data-tool="export" disabled><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>Экспорт</span></button>
+  </nav>
+</main>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-card">
+    <h3 id="sheetTitle">Экспорт видео</h3>
+    <p id="sheetText" class="dim">MP4 · H.264 · 720p</p>
+    <div class="progress"><div id="progressBar"></div></div>
+    <p id="progressLbl" class="pct">0%</p>
+    <div class="row-btns end">
+      <button id="sheetCancel" class="ghost">Отмена</button>
+      <button id="sheetOk" class="cta" hidden>Готово</button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

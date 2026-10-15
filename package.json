@@ -1,0 +1,20 @@
+{
+  "name": "clipmaster",
+  "version": "0.1.0",
+  "description": "КлипМастер — видеоредактор для Android (Capacitor, MVP-заготовка)",
+  "private": true,
+  "scripts": {
+    "copy:www": "mkdir -p www && cp -f index.html styles.css app.js manifest.json icon.svg www/",
+    "cap:sync": "npm run copy:www && npx -y node@22 node_modules/@capacitor/cli/bin/capacitor sync android",
+    "android:build": "cd android && JAVA_HOME=/opt/jdk-21 ANDROID_HOME=/opt/android-sdk ./gradlew assembleDebug",
+    "android:open": "npx cap open android"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/status-bar": "^8.0.3"
+  }
+}

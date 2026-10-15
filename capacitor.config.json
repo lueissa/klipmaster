@@ -1,0 +1,7 @@
+{
+  "appId": "com.clipmaster.app",
+  "appName": "КлипМастер",
+  "webDir": "www",
+  "android": { "allowMixedContent": false },
+  "plugins": { "StatusBar": { "style": "DARK", "backgroundColor": "#111018" } }
+}

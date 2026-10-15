@@ -1,0 +1,18 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;font-family:system-ui,"DejaVu Sans",sans-serif}
+body{background:radial-gradient(circle at 20% 10%,#3b2d9e 0,#151030 45%,#0a0b10 100%);color:#fff;display:flex;flex-direction:column;align-items:center}
+h1{font-size:76px;line-height:1.08;margin:110px 60px 18px;text-align:center;letter-spacing:-.5px}
+h1 em{font-style:normal;background:linear-gradient(90deg,#8f7bff,#00d1b2);-webkit-background-clip:text;color:transparent}
+p{font-size:36px;color:#b4bcd2;margin:0 80px 60px;text-align:center}
+.phone{width:780px;height:1600px;border-radius:96px;background:#05060a;padding:22px;box-shadow:0 40px 120px #000c,0 0 0 3px #2c3044 inset;position:relative}
+.phone iframe{width:390px;height:800px;border:0;border-radius:40px;transform:scale(1.7949);transform-origin:0 0;background:#0d0f14}
+.notch{position:absolute;top:40px;left:50%;width:30px;height:30px;margin-left:-15px;border-radius:50%;background:#000;z-index:2;box-shadow:0 0 0 3px #111}
+</style></head><body>
+<h1 id="t"></h1><p id="s"></p>
+<div class="phone"><div class="notch"></div><iframe id="f"></iframe></div>
+<script>
+const q=new URLSearchParams(location.search);
+document.getElementById('t').innerHTML=q.get('t');document.getElementById('s').textContent=q.get('s');
+document.getElementById('f').src='app-mock.html#'+q.get('m');
+</script></body></html>
