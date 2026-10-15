@@ -10,7 +10,7 @@
 | Возрастной рейтинг | 0+ |
 | Цена | Бесплатно, без встроенных покупок |
 | Реклама | Нет |
-| Политика конфиденциальности | `docs/privacy.html` → опубликовать (GitHub Pages, папка `/docs`) и указать URL |
+| Политика конфиденциальности | https://lueissa.github.io/klipmaster/privacy.html |
 | Контакт поддержки | **DEV_EMAIL@example.com — заменить** |
 
 ## Краткое описание (до 80 символов)
@@ -70,4 +70,4 @@
 ## Перед отправкой — заменить
 1. `DEV_EMAIL@example.com` в `docs/privacy.html`, `docs/index.html`, `store/privacy.html` и в поле «Контакт» RuStore
 2. `[ФИО / наименование разработчика — заменить]` в `docs/privacy.html` и `store/privacy.html`
-3. Опубликовать `docs/` (GitHub Pages: Settings → Pages → Branch main, папка /docs) и вставить URL privacy.html в RuStore
+3. ~~Опубликовать docs/~~ — опубликовано: https://lueissa.github.io/klipmaster/privacy.html (после замены e-mail — commit + push, Pages обновится сам)
