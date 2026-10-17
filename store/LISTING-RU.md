@@ -11,7 +11,7 @@
 | Цена | Бесплатно, без встроенных покупок |
 | Реклама | Нет |
 | Политика конфиденциальности | https://lueissa.github.io/klipmaster/privacy.html |
-| Контакт поддержки | **DEV_EMAIL@example.com — заменить** |
+| Контакт поддержки | **lolladon@yandex.ru — заменить** |
 
 ## Краткое описание (до 80 символов)
 Монтаж видео на телефоне: переходы, фильтры, музыка и текст — без рекламы
@@ -68,6 +68,6 @@
 - Перегенерация: `bash store/screenshots/render.sh` (headless Chrome)
 
 ## Перед отправкой — заменить
-1. `DEV_EMAIL@example.com` в `docs/privacy.html`, `docs/index.html`, `store/privacy.html` и в поле «Контакт» RuStore
+1. `lolladon@yandex.ru` в `docs/privacy.html`, `docs/index.html`, `store/privacy.html` и в поле «Контакт» RuStore
 2. `[ФИО / наименование разработчика — заменить]` в `docs/privacy.html` и `store/privacy.html`
 3. ~~Опубликовать docs/~~ — опубликовано: https://lueissa.github.io/klipmaster/privacy.html (после замены e-mail — commit + push, Pages обновится сам)
