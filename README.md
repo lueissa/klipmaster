@@ -1,8 +1,9 @@
-# КлипМастер 1.0.0
+# КлипМастер 1.0.1
 
 Офлайн-видеоредактор для Android (Capacitor 8 + нативный движок на Media3 Transformer 1.8.0). Магазин: RuStore. appId `com.clipmaster.app`.
 
-## Артефакты (`dist/`)
+## Артефакты (`dist/`, не в git)
+- `KlipMaster-1.0.1-release.apk` / `.aab` — versionCode 2, подписаны `release/clipmaster-release.jks` (SHA-256 сертификата 98:81:79:FB:…:8A:32:F3:00)
 - `KlipMaster-1.0.0-debug.apk` — отладочная сборка
 - `KlipMaster-1.0.0-release.apk` — подписанный release (ключ `release/clipmaster-release.jks`)
 - `KlipMaster-1.0.0-release.aab` — подписанный bundle для загрузки в RuStore
@@ -20,6 +21,12 @@
 - Формат 16:9 (1280×720) / 9:16 (720×1280), экспорт MP4 H.264/AAC с прогрессом и отменой
 - Сохранение в галерею Movies/KlipMaster (Android 10+; на 7–9 — Android/data/com.clipmaster.app/files/Movies)
 - Автосохранение и восстановление проекта, кнопка «Новый»
+- **Оценки RuStore (1.0.1)** — нативный плагин `RuStoreReviewPlugin.java` на `ru.rustore.sdk:review:10.5.2` (репозиторий `nexus-external.rustore.ru/repository/maven-rustore-exposed`): `requestReviewFlow`, `launchReviewFlow`, `openStorePage`, `openUrl`
+  - Автозапрос: после «Готово» на **2-м успешном экспорте** показывается мягкое окно «Нравится КлипМастер?» (кнопки «Оценить» / «Не сейчас», без фильтрации по настроению — «Оценить» всегда ведёт в RuStore)
+  - Если пользователь нажал «Не сейчас» или экран RuStore не показался — следующий автозапрос не раньше чем через 10 экспортов; после успешного показа экрана RuStore приложение больше не спрашивает само
+  - Счётчики — `localStorage` ключ `clipmaster.review.v1` (`exports`, `lastAskAt`, `shown`)
+  - Меню «⋮» → «Оценить приложение» (всегда доступно) и «Политика конфиденциальности»; если SDK не смог показать оценку — открывается `rustore://apps.rustore.ru/app/com.clipmaster.app`, затем `https://www.rustore.ru/catalog/app/com.clipmaster.app`
+  - Экран оценки RuStore работает только у приложения, установленного из RuStore, с той же подписью и при установленном RuStore; на устройстве не проверено
 
 ## Ограничения
 - Переходы и точные цвета фильтров видны только в экспортированном файле (в превью — CSS-приближение)

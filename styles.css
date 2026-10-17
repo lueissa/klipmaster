@@ -103,3 +103,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 [hidden]{display:none!important}
 @media (max-width:420px){.brand span{font-size:16px}.top-actions{gap:6px}.chip{padding:6px 10px}.cta{padding:8px 14px}}
+
+.chip.icon{padding:6px 11px;font-size:16px;line-height:1}
+.menu-card h3{margin-bottom:10px}
+.menu-item{display:flex;gap:12px;align-items:center;width:100%;padding:14px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);margin-bottom:8px;font-size:15px;text-align:left}
+.small{font-size:12px;margin:10px 0 4px!important}
+@media (max-width:440px){.brand span{display:none}}

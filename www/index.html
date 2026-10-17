@@ -17,6 +17,7 @@
     <div class="brand"><img src="icon.svg" alt=""><span>КлипМастер</span></div>
     <div class="top-actions">
       <button id="newBtn" class="chip" title="Новый проект">Новый</button>
+      <button id="menuBtn" class="chip icon" title="Меню" aria-label="Меню">⋮</button>
       <button id="formatBtn" class="chip" title="Формат кадра">16:9</button>
       <button id="exportBtn" class="cta" disabled>Экспорт</button>
     </div>
@@ -137,6 +138,22 @@
       <button id="sheetCancel" class="ghost">Отмена</button>
       <button id="sheetOk" class="cta" hidden>Готово</button>
     </div>
+  </div>
+</div>
+<div id="menu" class="sheet" hidden>
+  <div class="sheet-card menu-card">
+    <h3>КлипМастер</h3>
+    <button id="rateBtn" class="menu-item">★ <span>Оценить приложение</span></button>
+    <button id="privacyBtn" class="menu-item">🔒 <span>Политика конфиденциальности</span></button>
+    <p class="dim small">Версия 1.0.1 · обработка видео только на устройстве</p>
+    <div class="row-btns end"><button id="menuClose" class="ghost">Закрыть</button></div>
+  </div>
+</div>
+<div id="ask" class="sheet" hidden>
+  <div class="sheet-card">
+    <h3>Нравится КлипМастер?</h3>
+    <p class="dim">Поставьте оценку в RuStore и напишите, что улучшить, — любой отзыв помогает развивать приложение.</p>
+    <div class="row-btns end"><button id="askLater" class="ghost">Не сейчас</button><button id="askRate" class="cta">Оценить</button></div>
   </div>
 </div>
 <div id="toast" class="toast" hidden></div>

@@ -175,7 +175,8 @@ function sheet(title, text, pct, done) {
   $('progressBar').parentElement.hidden = $('progressLbl').hidden = pct < 0;
   $('sheetCancel').hidden = done; $('sheetOk').hidden = !done;
 }
-$('sheetOk').onclick = () => $('sheet').hidden = true;
+$('sheetOk').onclick = () => { $('sheet').hidden = true; if (exportJustSucceeded) { exportJustSucceeded = false; maybeAskReview(); } };
+let exportJustSucceeded = false;
 $('sheetCancel').onclick = async () => { if (Engine) await Engine.cancelExport(); $('sheet').hidden = true; toast('Экспорт отменён'); };
 
 async function startExport() {
@@ -196,6 +197,7 @@ async function startExport() {
       textSize: state.textSize, textStyle: state.textStyle, textColor: state.textColor,
     });
     const mb = (r.sizeBytes / 1048576).toFixed(1);
+    onExportSuccess();
     sheet('Готово!', `Сохранено: ${r.location} · ${fmt(r.durationMs)} · ${mb} МБ`, 100, true);
   } catch (e) {
     if ($('sheet').hidden) return;
@@ -284,3 +286,45 @@ const _render = render;
 render = function () { _render(); syncExtras(); saveProject(); };
 restoreProject();
 render();
+
+// ---------- Оценки RuStore ----------
+// Автозапрос: после 2-го успешного экспорта; если экран оценки не был показан или пользователь
+// отказался — повтор не раньше чем через 10 экспортов. После показа экрана RuStore — больше не спрашиваем сами.
+const Review = Engine ? Cap.Plugins.RuStoreReview : null;
+const RKEY = 'clipmaster.review.v1';
+const rstate = () => { try { return Object.assign({ exports: 0, lastAskAt: 0, shown: false }, JSON.parse(localStorage.getItem(RKEY) || '{}')); } catch (e) { return { exports: 0, lastAskAt: 0, shown: false }; } };
+const rsave = (s) => { try { localStorage.setItem(RKEY, JSON.stringify(s)); } catch (e) {} };
+function onExportSuccess() {
+  const s = rstate(); s.exports++; rsave(s);
+  exportJustSucceeded = true;
+  if (Review && shouldAsk(s)) Review.requestReviewFlow().catch(() => {}); // подготовить заранее
+}
+function shouldAsk(s) {
+  if (s.shown) return false;
+  if (s.lastAskAt === 0) return s.exports >= 2;
+  return s.exports - s.lastAskAt >= 10;
+}
+function maybeAskReview() {
+  const s = rstate();
+  if (!Review || !shouldAsk(s)) return;
+  s.lastAskAt = s.exports; rsave(s);
+  $('ask').hidden = false;
+}
+async function launchReview(fromMenu) {
+  if (!Review) { toast('Оценка доступна в приложении из RuStore'); return; }
+  let r = { shown: false };
+  try { r = await Review.launchReviewFlow(); } catch (e) {}
+  if (r.shown) { const s = rstate(); s.shown = true; rsave(s); return; }
+  // SDK не смог показать экран (нет RuStore, лимит показов и т.п.) — открываем страницу приложения
+  try { await Review.openStorePage(); } catch (e) { if (fromMenu) toast('Не удалось открыть RuStore'); }
+}
+$('askRate').onclick = () => { $('ask').hidden = true; launchReview(false); };
+$('askLater').onclick = () => { $('ask').hidden = true; };
+$('menuBtn').onclick = () => { $('menu').hidden = false; };
+$('menuClose').onclick = () => { $('menu').hidden = true; };
+$('menu').onclick = (e) => { if (e.target.id === 'menu') $('menu').hidden = true; };
+$('rateBtn').onclick = () => { $('menu').hidden = true; launchReview(true); };
+$('privacyBtn').onclick = async () => {
+  const url = 'https://lueissa.github.io/klipmaster/privacy.html';
+  if (Review) { try { await Review.openUrl({ url }); } catch (e) { toast('Не удалось открыть ссылку'); } } else window.open(url, '_blank');
+};
